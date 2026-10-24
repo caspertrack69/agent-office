@@ -91,12 +91,14 @@ const api: SimWorkerApi = {
   triggerScenario(id) { if (world) world.scenarioEngine.start(world, id); },
   createTask(title, opts) {
     if (!world) return;
-    // lazy import to avoid worker bundle cycle
-    import('../sim/task.ts').then(({ createTask }) => {
+    // Use static import-resolved helper to avoid worker bundle cycle warning
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    void (async () => {
+      const { createTask: mk } = await import('../sim/task.ts');
       if (!world) return;
-      const t = createTask(title, (opts ?? {}) as never);
+      const t = mk(title, (opts ?? {}) as never);
       world.tasks.push(t);
-    });
+    })();
   },
   assignTask(taskId, agentId) { return world ? world.assignTask(taskId, agentId) : false; },
   updatePersona(agentId, patch) { return world ? world.updatePersona(agentId, patch as never) : false; },

@@ -105,8 +105,9 @@ function createInlineClient(seed: number): WorkerClient {
     async getSnapshot() { const w = await ensureWorld(); return w.snapshot(); },
     async handleExternal(evt) { const w = await ensureWorld(); w.handleExternalEvent(evt); },
     onSnapshot(cb) { snapshotCbs.add(cb); return () => snapshotCbs.delete(cb); },
-    onEventLog(cb) {
-      const off = (this as WorkerClient).onSnapshot((s) => cb(s.events));
+    onEventLog(cb: (events: SimSnapshot['events']) => void) {
+      const self = this as unknown as WorkerClient;
+      const off = self.onSnapshot((s: SimSnapshot) => cb(s.events));
       return off;
     },
     dispose() { this.stop(); },
@@ -148,9 +149,10 @@ export async function createWorkerClient(opts?: { seed?: number; forceInline?: b
       loadSnapshot: (s) => api.loadSnapshot(s),
       getSnapshot: () => api.getSnapshot(),
       handleExternal: (e) => api.handleExternal(e),
-      onSnapshot(cb) { snapshotCbs.add(cb); return () => snapshotCbs.delete(cb); },
-      onEventLog(cb) {
-        const off = this.onSnapshot((s) => cb(s.events));
+      onSnapshot(cb: (s: SimSnapshot) => void) { snapshotCbs.add(cb); return () => snapshotCbs.delete(cb); },
+      onEventLog(cb: (events: SimSnapshot['events']) => void) {
+        const self = this as unknown as WorkerClient;
+        const off = self.onSnapshot((s: SimSnapshot) => cb(s.events));
         return off;
       },
       dispose() { worker.terminate(); },

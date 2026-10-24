@@ -21,12 +21,10 @@ export type InterpSnapshot = {
 export class SnapshotBuffer {
   private prev: InterpSnapshot | null = null;
   private curr: InterpSnapshot | null = null;
-  private prevTime = 0;
   private currTime = 0;
 
   push(snap: InterpSnapshot): void {
     this.prev = this.curr;
-    this.prevTime = this.currTime;
     this.curr = snap;
     this.currTime = performance.now();
   }
