@@ -20,7 +20,8 @@ export function createEvent(
 /** Simple in-memory ring buffer for events */
 export class EventBus {
   private events: SimEvent[] = [];
-  constructor(private max = 200) {}
+  private max: number;
+  constructor(max = 200) { this.max = max; }
   push(e: SimEvent): void {
     this.events.push(e);
     if (this.events.length > this.max) this.events.shift();

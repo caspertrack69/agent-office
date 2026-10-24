@@ -7,10 +7,9 @@ export type RngState = { seed: number; n: number };
 export class SeededRng {
   private s: number;
   private n: number;
-  constructor(
-    public seed: number,
-    n = 0,
-  ) {
+  seed: number;
+  constructor(seed: number, n = 0) {
+    this.seed = seed;
     this.s = seed >>> 0;
     this.n = n;
   }
