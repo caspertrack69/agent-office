@@ -18,9 +18,9 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           onClick={clear}
           style={{
             position: 'fixed', left: '50%', bottom: 62, transform: 'translateX(-50%)',
-            background: '#1a1206', color: '#fdf0c8', border: '1px solid #4a3616',
+            background: 'var(--bg-elevated)', color: 'var(--text-primary)', border: '1px solid var(--border-strong)',
             padding: '8px 14px', borderRadius: 10, fontFamily: 'ui-monospace, monospace',
-            fontSize: 12, boxShadow: '0 10px 28px rgba(0,0,0,0.5)', zIndex: 80, cursor: 'pointer',
+            fontSize: 12, boxShadow: '0 0 14px var(--accent-primary-glow)', zIndex: 80, cursor: 'pointer',
           }}
         >
           {toast}

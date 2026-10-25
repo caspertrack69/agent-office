@@ -4,6 +4,7 @@ import { Billboard, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { useSimStore, useUiStore } from '../store/simStore.ts';
 import { getPersonaColor } from '../data/personas/index.ts';
+import { readToken } from '../theme/tokens.ts';
 import type { Agent } from '../sim/types.ts';
 
 export type AgentPoseRef = {
@@ -44,6 +45,8 @@ function SingleAgent({ agent, pose }: { agent: Agent; pose: AgentPoseRef }) {
 
   const isOffline = agent.presence === 'offline';
   const pantsColor = '#2d2a24';
+  const accentPrimary = readToken('--accent-primary');
+  const accentOrange = readToken('--accent-orange');
 
   return (
     <group ref={meshRef} position={[pose.pos.x, pose.pos.y, pose.pos.z]}>
@@ -53,11 +56,11 @@ function SingleAgent({ agent, pose }: { agent: Agent; pose: AgentPoseRef }) {
         <meshBasicMaterial color="#000" transparent opacity={0.22} depthWrite={false} />
       </mesh>
 
-      {/* selection ring – gold */}
+      {/* selection ring – accent */}
       {isSelected && (
         <mesh position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[0.46, 0.56, 32]} />
-          <meshBasicMaterial color="#e8b84b" transparent opacity={0.95} side={THREE.DoubleSide} />
+          <meshBasicMaterial color={accentPrimary} transparent opacity={0.95} side={THREE.DoubleSide} />
         </mesh>
       )}
 
@@ -101,7 +104,7 @@ function SingleAgent({ agent, pose }: { agent: Agent; pose: AgentPoseRef }) {
         <mesh position={[0.07, 1.04, 0.16]}><boxGeometry args={[0.05, 0.05, 0.01]} /><meshStandardMaterial color="#1a1a1a" /></mesh>
       </group>
 
-      {/* HQ name label – black pill with colored left border + yellow dot */}
+      {/* HQ name label – surface pill with accent left border + colored dot */}
       <Billboard position={[0, 1.58, 0]}>
         <Html center distanceFactor={9} style={{ pointerEvents: 'none' }} transform={false}>
           <div
@@ -110,21 +113,21 @@ function SingleAgent({ agent, pose }: { agent: Agent; pose: AgentPoseRef }) {
               alignItems: 'center',
               gap: 6,
               padding: '3px 8px 3px 4px',
-              background: isSelected ? '#1f1406' : 'rgba(12,8,2,0.96)',
-              border: `1px solid ${isSelected ? '#e8b84b' : 'rgba(232,184,75,0.22)'}`,
+              background: isSelected ? 'var(--bg-surface-2)' : 'var(--bg-surface)',
+              border: `1px solid ${isSelected ? 'var(--accent-primary)' : 'var(--border)'}`,
               borderLeft: `3px solid ${color}`,
               borderRadius: 6,
-              boxShadow: '0 4px 14px rgba(0,0,0,0.45)',
+              boxShadow: isSelected ? '0 0 12px var(--accent-primary-glow)' : '0 4px 14px rgba(0,0,0,0.45)',
               whiteSpace: 'nowrap',
               fontFamily: 'ui-monospace, monospace',
               fontSize: 11,
               fontWeight: 700,
-              color: '#fdf0c8',
+              color: 'var(--text-primary)',
               letterSpacing: '0.01em',
               opacity: isOffline ? 0.6 : 1,
             }}
           >
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#facc15', flexShrink: 0, boxShadow: '0 0 6px rgba(250,204,21,0.6)' }} />
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: color, flexShrink: 0, boxShadow: `0 0 6px ${color}66` }} />
             {agent.name}
           </div>
         </Html>
@@ -138,13 +141,13 @@ function SingleAgent({ agent, pose }: { agent: Agent; pose: AgentPoseRef }) {
               style={{
                 fontSize: 11,
                 fontFamily: 'ui-monospace, monospace',
-                background: '#fdf0c8',
-                color: '#1a1206',
+                background: 'var(--bg-elevated)',
+                color: 'var(--text-primary)',
                 padding: '4px 8px',
                 borderRadius: 10,
                 whiteSpace: 'nowrap',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.35)',
-                border: '1px solid #e8b84b',
+                boxShadow: '0 0 12px var(--accent-primary-glow)',
+                border: '1px solid var(--accent-primary)',
               }}
             >
               {agent.speechText}
@@ -157,7 +160,7 @@ function SingleAgent({ agent, pose }: { agent: Agent; pose: AgentPoseRef }) {
       {agent.currentTaskId && (
         <mesh position={[0.26, 0.72, 0.14]}>
           <boxGeometry args={[0.09, 0.09, 0.02]} />
-          <meshBasicMaterial color="#f59e0b" />
+          <meshBasicMaterial color={accentOrange} />
         </mesh>
       )}
     </group>

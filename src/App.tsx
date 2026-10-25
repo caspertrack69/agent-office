@@ -50,13 +50,13 @@ function ChatPanel() {
   const recent = [...events].reverse().slice(0, 24);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10, minHeight: 260 }}>
-      <div style={{ fontFamily: 'ui-monospace, monospace', fontSize: 11, color: '#9a8a6a' }}>
+      <div style={{ fontFamily: 'ui-monospace, monospace', fontSize: 11, color: 'var(--text-muted)' }}>
         Agents: {agents.map((a) => a.name).join(', ') || 'none'}
       </div>
-      <div style={{ flex: 1, border: '1px solid #2e2210', borderRadius: 10, background: '#0f0a04', padding: 8, maxHeight: 300, overflow: 'auto', display: 'grid', gap: 6 }}>
+      <div style={{ flex: 1, border: '1px solid var(--border)', borderRadius: 10, background: 'var(--bg-base)', padding: 8, maxHeight: 300, overflow: 'auto', display: 'grid', gap: 6 }}>
         {chatLog.map((c) => (
-          <div key={c.id} className="event-row" style={{ borderColor: '#4a3616' }}>
-            <span className="badge" style={{ background: '#2a1e0c', color: '#e8b84b' }}>you</span>
+          <div key={c.id} className="event-row" style={{ borderColor: 'var(--border-strong)' }}>
+            <span className="badge" style={{ background: 'var(--bg-elevated)', color: 'var(--accent-primary)' }}>you</span>
             <span className="event-msg">{c.text}</span>
           </div>
         ))}

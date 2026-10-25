@@ -5,9 +5,9 @@ export function AlertBanner() {
   if (alerts.length === 0) return null;
   const top = alerts[0]!;
   const color =
-    top.severity === 'critical' ? '#991b1b' : top.severity === 'warning' ? '#92400e' : '#1e40af';
+    top.severity === 'critical' ? 'var(--danger)' : top.severity === 'warning' ? 'var(--accent-orange)' : 'var(--accent-blue)';
   const bg =
-    top.severity === 'critical' ? '#fecaca' : top.severity === 'warning' ? '#fef3c7' : '#dbeafe';
+    top.severity === 'critical' ? 'var(--danger-soft)' : top.severity === 'warning' ? 'var(--accent-orange-soft)' : 'var(--accent-blue-soft)';
 
   return (
     <div className="alert-banner" style={{ background: bg, borderColor: color, color }}>

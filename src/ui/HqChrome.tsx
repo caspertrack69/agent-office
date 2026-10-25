@@ -113,7 +113,7 @@ export function HqLeftRail({ onCollapseToggle }: { onCollapseToggle?: () => void
       <button type="button" className="hq-rail-btn" title={leftCollapsed ? 'Expand' : 'Collapse'} aria-label={leftCollapsed ? 'Expand sidebar' : 'Collapse sidebar'} onClick={() => { setLeftCollapsed(!leftCollapsed); onCollapseToggle?.(); }}>
         {leftCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
       </button>
-      <div style={{ height: 1, background: '#2a1e0c', width: '60%', margin: '2px 0' }} />
+      <div style={{ height: 1, background: 'var(--border)', width: '60%', margin: '2px 0' }} />
       <button type="button" className={`hq-rail-btn ${leftView === 'home' ? 'active' : ''}`} title="Home" aria-label="Home" onClick={() => setLeftView('home')}>
         <Home size={14} />
       </button>
@@ -123,7 +123,7 @@ export function HqLeftRail({ onCollapseToggle }: { onCollapseToggle?: () => void
       <button type="button" className={`hq-rail-btn ${leftView === 'hq' ? 'active' : ''}`} title="HQ" aria-label="HQ" onClick={() => setLeftView('hq')}>
         <Building2 size={14} />
       </button>
-      <div style={{ height: 1, background: '#2a1e0c', width: '60%', margin: '6px 0 0' }} />
+      <div style={{ height: 1, background: 'var(--border)', width: '60%', margin: '6px 0 0' }} />
       <label className={`hq-rail-btn ${topDown ? 'active' : ''}`} title={topDown ? 'Isometric' : 'Top-down'} style={{ cursor: 'pointer' }}>
         <input type="checkbox" checked={topDown} onChange={(e) => setTopDown(e.target.checked)} style={{ display: 'none' }} />
         <LayoutGrid size={12} />
@@ -161,11 +161,11 @@ export function HqBottomBar() {
   return (
     <>
       <div className="hq-bottom" role="status" aria-live="polite">
-        <span><b style={{ color: working ? '#facc15' : '#9a8a6a' }}>{working} working</b></span>
+        <span><b style={{ color: working ? 'var(--accent-primary)' : 'var(--text-muted)' }}>{working} working</b></span>
         <span className="dot" />
-        <span><b>{idle} idle</b></span>
+        <span><b style={{ color: 'var(--accent-violet)' }}>{idle} idle</b></span>
         <span className="dot" />
-        <span><b style={{ color: err ? '#ef4444' : undefined }}>{err} error</b></span>
+        <span><b style={{ color: err ? 'var(--danger)' : 'var(--text-muted)' }}>{err} error</b></span>
         <span className="dot" />
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Activity size={10} /> quiet</span>
         <span className="dot" />

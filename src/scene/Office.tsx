@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { useMemo } from 'react';
 import { useSimStore, useUiStore } from '../store/simStore.ts';
+import { readToken } from '../theme/tokens.ts';
 
 // ── materials ──
 const C = {
@@ -158,6 +159,8 @@ export function Office() {
   const zoneStates = useSimStore((s) => s.zoneStates);
   const showGrid = useUiStore((s) => s.showGrid);
   const showWalls = useUiStore((s) => s.showWalls);
+  const gridCenter = readToken('--accent-violet');
+  const gridLines = readToken('--border');
 
   // zone tint overlay (subtle)
   const zoneTint = (id: string) => {
@@ -175,7 +178,7 @@ export function Office() {
         <meshStandardMaterial color={C.floor} roughness={0.95} />
       </mesh>
       {/* floor grid subtle */}
-      {showGrid && <gridHelper args={[22, 22, '#f3e8c8', '#fdf6e0']} position={[0, 0.008, 0]} />}
+      {showGrid && <gridHelper args={[22, 22, gridCenter, gridLines]} position={[0, 0.008, 0]} />}
 
       {/* secondary floor tint for zones */}
       {zoneTint('war_room') && (
