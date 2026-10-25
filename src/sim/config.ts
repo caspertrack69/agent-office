@@ -1,6 +1,6 @@
 /**
  * Central simulation constants.
- * Single source of truth — see docs/brief.md §6, §13.
+ * Single source of truth for tick rate, agent limits, and speeds.
  */
 export const MAX_AGENTS = 7 as const;
 

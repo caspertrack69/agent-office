@@ -1,6 +1,5 @@
 /**
  * Persistence — IndexedDB via `idb`, versioned JSON, export/import.
- * Brief §9.
  */
 import { openDB, type DBSchema } from 'idb';
 import { SCHEMA_VERSION } from '../sim/config.ts';

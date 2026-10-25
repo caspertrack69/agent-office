@@ -1,6 +1,6 @@
 /**
  * Office layout — single source of truth for zones, slots, and static objects.
- * See brief §10. Positions in meters (Three.js units).
+ * Positions in meters (Three.js units).
  */
 import type { Slot, Vec3, ZoneState } from '../sim/types.ts';
 

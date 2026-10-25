@@ -1,6 +1,6 @@
 /**
  * Web Worker entry — fixed 20 Hz tick with accumulator, Comlink API.
- * Speed changes tick count per wall-clock, not dt (brief §6).
+ * Speed changes tick count per wall-clock, not dt.
  */
 import * as Comlink from 'comlink';
 import { SimWorld } from '../sim/world.ts';

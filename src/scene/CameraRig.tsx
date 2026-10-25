@@ -6,6 +6,12 @@ import { useUiStore } from '../store/simStore.ts';
 import { agentPoseMapRef } from './AgentMesh.tsx';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
+// Isometric framing: southeast corner looking northwest (matches HQ diamond view)
+const ISO_POS = new THREE.Vector3(13.5, 13.5, 13.5);
+const TOP_POS = new THREE.Vector3(0, 19, 0.1);
+const ISO_TARGET = new THREE.Vector3(0, 0, -0.4);
+const TOP_TARGET = new THREE.Vector3(0, 0, 0);
+
 export function CameraRig() {
   const controlsRef = useRef<OrbitControlsImpl>(null);
   const follow = useUiStore((s) => s.followAgent);
@@ -14,41 +20,51 @@ export function CameraRig() {
   const { camera } = useThree();
 
   useEffect(() => {
-    if (topDown) {
-      camera.position.set(0, 18, 0.1);
-      controlsRef.current?.target.set(0, 0, 0);
-      controlsRef.current?.update();
-    } else {
-      camera.position.set(10, 8, 10);
-      controlsRef.current?.target.set(0, 0, 0);
-      controlsRef.current?.update();
+    const controls = controlsRef.current;
+    if (topDown) camera.position.copy(TOP_POS);
+    else camera.position.copy(ISO_POS);
+    if (controls) {
+      controls.target.copy(topDown ? TOP_TARGET : ISO_TARGET);
+      controls.update();
     }
   }, [topDown, camera]);
 
   useFrame(() => {
     if (!follow || !selectedId) return;
     const pose = agentPoseMapRef().get(selectedId);
-    if (!pose || !controlsRef.current) return;
-    const target = controlsRef.current.target;
+    const controls = controlsRef.current;
+    if (!pose || !controls) return;
+    const target = controls.target;
     target.lerp(new THREE.Vector3(pose.pos.x, 0, pose.pos.z), 0.06);
-    // keep camera offset relative to target
-    const offset = new THREE.Vector3().subVectors(camera.position, target);
-    // gently follow
-    camera.position.lerp(new THREE.Vector3(pose.pos.x + offset.x, camera.position.y, pose.pos.z + offset.z), 0.04);
-    controlsRef.current.update();
+    const dx = camera.position.x - target.x;
+    const dz = camera.position.z - target.z;
+    camera.position.lerp(new THREE.Vector3(pose.pos.x + dx, camera.position.y, pose.pos.z + dz), 0.04);
+    controls.update();
   });
 
   return (
     <>
-      <PerspectiveCamera makeDefault position={[10, 8, 10]} fov={52} near={0.1} far={100} />
+      <PerspectiveCamera makeDefault position={ISO_POS.toArray() as [number, number, number]} fov={42} near={0.1} far={120} />
       <OrbitControls
         ref={controlsRef}
         enableDamping
-        dampingFactor={0.08}
-        minDistance={3}
-        maxDistance={22}
-        maxPolarAngle={Math.PI / 2.05}
-        target={[0, 0, 0]}
+        dampingFactor={0.09}
+        enableRotate={!topDown}
+        minPolarAngle={0.75}
+        maxPolarAngle={1.08}
+        minAzimuthAngle={-0.35}
+        maxAzimuthAngle={0.35}
+        minDistance={6}
+        maxDistance={28}
+        target={[0, 0, -0.4]}
+        enablePan
+        panSpeed={1.15}
+        zoomSpeed={1.1}
+        mouseButtons={{
+          LEFT: THREE.MOUSE.PAN,
+          MIDDLE: THREE.MOUSE.DOLLY,
+          RIGHT: THREE.MOUSE.ROTATE,
+        }}
       />
     </>
   );
